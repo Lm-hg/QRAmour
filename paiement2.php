@@ -1,14 +1,14 @@
 <?php
 session_start();
-define('STRIPE_SECRET_KEY', 'sk_test_51ObpUVFRcigmvgt4reWUVvD2jMXHxuq5vcZUC0AFalcCgOUfY1F7cMrqjpDOSmoH8ZPqXzBdJTJ63Fe031NAHGOZ00pCkYtFVj');
+define('STRIPE_SECRET_KEY', 'secret');
 
 require_once './vendor/autoload.php'; 
 
 // Informations de connexion à la base de données
-$serveur = "sql113.infinityfree.com";
-$nomutilisateur = "if0_36004836";
-$motdepasse = "7JowhORwB0S";
-$basededonnees = "if0_36004836_love";
+$serveur = "localhost";
+$nomutilisateur = "root";
+$motdepasse = "";
+$basededonnees = "love";
 
 // Connexion à la base de données via PDO
 try {
@@ -37,7 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             'return_url' => $return_url,
         ]);
 
-        // Check the status of the payment intent
         if ($paymentIntent->status === 'requires_action' || $paymentIntent->status === 'requires_source_action') {
             header("Location:./paiement.php");
 
@@ -45,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } elseif ($paymentIntent->status === 'succeeded') {
             $montant = 0.5;
             $date_paiement = date('Y-m-d');
-            $id_utilisateur = $_SESSION['id_utilisateur']; // Supposant que vous stockiez l'ID de l'utilisateur dans une session
+            $id_utilisateur = $_SESSION['id_utilisateur']; 
 
             $requete = $connexion->prepare("INSERT INTO paiement (id_utilisateur, montant, date_paiement) VALUES (:id_utilisateur, :montant, :date_paiement)");
             $requete->bindParam(':id_utilisateur', $id_utilisateur);
@@ -67,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
        
 
-        //echo json_encode(['client_secret' => $paymentIntent->client_secret]);
     } catch (\Stripe\Exception\CardException $e) {
         echo "Erreur de carte : " . $e->getMessage();
     } catch (\Stripe\Exception\InvalidRequestException $e) {
@@ -194,7 +192,7 @@ select,
 
 
     <script>
-        var stripe = Stripe('pk_test_51ObpUVFRcigmvgt4r5cuzHjd9oeuQg078d5lRwuSsIfS8bkrsEyjfu4YX5ni6lk3zwub3P7WaTdWtiFNtyxHK2U7007vNcshzU'); // Remplacez par votre clé publique
+        var stripe = Stripe('secret'); 
         var elements = stripe.elements();
         var cardElement = elements.create('card');
 
