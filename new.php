@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $script = '
         document.getElementById("forme").addEventListener("submit", function(event) {
             event.preventDefault();
-            var amount = 100;
+            var amount = 100;//mettre le montant que vous recevrez
             var compteur = ' . $compteur . ';
             
             openKkiapayWidget({
@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 position: "center",
                 theme: "#0095ff",
                 sandbox: true,
-                key: "66b5bd0011c511eea310b7029dff9cca"
+                key: //votre cle api kkiapay
             });
 
             addSuccessListener(response => {
